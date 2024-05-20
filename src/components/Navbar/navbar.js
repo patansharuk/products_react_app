@@ -12,19 +12,27 @@ const CustomNavbar = () => {
     const options = {
       method: "delete",
       headers: {
+        "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
     };
     fetch(logout_url, options)
-      .then((res) => res.json())
-      .then((data) => {
-        if(data.status === 200){
-            localStorage.removeItem(JWT_TOKEN)
-            localStorage.removeItem(USER_DETAILS_KEY)
-            window.location.replace('/login')
+      .then((res) => {
+        if (res.status === 204) {
+          return;
         }
-      });
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then(() => {
+        localStorage.removeItem(JWT_TOKEN);
+        localStorage.removeItem(USER_DETAILS_KEY);
+        window.location.replace("/login");
+      })
+      .catch((e) => console.log(e));
   };
 
   return (
@@ -34,7 +42,8 @@ const CustomNavbar = () => {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-            Signed in as: <span className="badge bg-info">{user_details.email}</span>
+            Signed in as:{" "}
+            <span className="badge bg-info">{user_details.email}</span>
           </Navbar.Text>
         </Navbar.Collapse>
         <Button variant="danger" className="ms-2" onClick={make_logout}>
