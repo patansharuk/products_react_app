@@ -1,15 +1,12 @@
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css"
-
-const getAccessToken = () => {
-    return localStorage.getItem('jwt_token')
-}
+import { get_auth_token } from "../../utils/authUtils";
 
 const requestInterceptor = (req) => (
     {
         ...req,
         headers: {
-            Authorization: `Bearer ${getAccessToken()}`
+            Authorization: `Bearer ${get_auth_token()}`
         },
     }
 )

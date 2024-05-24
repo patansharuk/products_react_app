@@ -1,13 +1,13 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import { JWT_TOKEN, USER_DETAILS_KEY } from "../Auth/auth_crud";
 import { Button } from "react-bootstrap";
+import { clear_auth_token, clear_user_details, get_auth_token, get_user_details } from "../../utils/authUtils";
 
 const CustomNavbar = () => {
-  const user_details = JSON.parse(localStorage.getItem(USER_DETAILS_KEY)) || {};
+  const user_details = get_user_details() || {};
 
   const make_logout = () => {
-    const token = JSON.parse(localStorage.getItem(JWT_TOKEN));
+    const token = get_auth_token();
     const logout_url = "http://localhost:3002/logout";
     const options = {
       method: "delete",
@@ -28,8 +28,8 @@ const CustomNavbar = () => {
         return res.json();
       })
       .then(() => {
-        localStorage.removeItem(JWT_TOKEN);
-        localStorage.removeItem(USER_DETAILS_KEY);
+        clear_auth_token()
+        clear_user_details()
         window.location.replace("/login");
       })
       .catch((e) => console.log(e));

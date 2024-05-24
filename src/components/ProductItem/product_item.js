@@ -4,8 +4,8 @@ import Card from "react-bootstrap/Card";
 
 const ProductItem = ({ product }) => {
   return (
-    <Col>
-      <Card style={{ width: "18rem" }}>
+    <Col sm="12" md="6" lg="4" className="mb-3">
+      <Card style={{ width: "18rem" }} className="w-100"> 
         <Card.Img
           variant="top"
           src="https://images.pexels.com/photos/2536965/pexels-photo-2536965.jpeg"

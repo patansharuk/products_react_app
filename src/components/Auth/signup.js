@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { JWT_TOKEN, USER_DETAILS_KEY } from "./auth_crud";
 import { Alert, Col, Container, Row } from "react-bootstrap";
+import { add_auth_token, add_user_details, get_auth_token } from "../../utils/authUtils";
 
 const redirect_to_back = () => {
   if (window.location.href.includes("signup")) {
@@ -19,7 +19,7 @@ const Signup = () => {
   const [shouldShowPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    const jwt_token = JSON.parse(localStorage.getItem(JWT_TOKEN));
+    const jwt_token = get_auth_token();
     if (jwt_token !== null) {
       redirect_to_back();
     }
@@ -50,8 +50,8 @@ const Signup = () => {
         if (data.errors) {
           setMessage(data.errors.join(" / "));
         } else {
-          localStorage.setItem(USER_DETAILS_KEY, JSON.stringify(data.resource));
-          localStorage.setItem(JWT_TOKEN, JSON.stringify(data.token));
+          add_user_details(data.resource);
+          add_auth_token(data.token);
           redirect_to_back();
         }
       })

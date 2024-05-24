@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { JWT_TOKEN } from "../Auth/auth_crud";
 import CustomNavbar from "../Navbar/navbar";
 import Alert from "react-bootstrap/Alert";
 import ProductItem from "../ProductItem/product_item";
 import { Container, Row } from "react-bootstrap";
+import { get_auth_token } from "../../utils/authUtils";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
   useEffect(() => {
     const fetch_products = () => {
-      const token = JSON.parse(localStorage.getItem(JWT_TOKEN));
+      const token = get_auth_token();
       if (token == null) {
         window.location.replace("/login");
       }
