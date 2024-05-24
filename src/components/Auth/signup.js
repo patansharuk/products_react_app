@@ -101,9 +101,18 @@ const Signup = () => {
                 onChange={() => setShowPassword(!shouldShowPassword)}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Create
-            </Button>
+            <Row>
+              <Col sm="8">
+                <Button variant="success" type="submit" className="w-100">
+                  Create
+                </Button>
+              </Col>
+              <Col>
+                <Button variant="warning" type="submit" className="w-100" href="/login">
+                  Login
+                </Button>
+              </Col>
+            </Row>
           </Form>
         </Col>
       </Row>
