@@ -57,3 +57,12 @@ export const get_auth_token = () => {
 export const get_user_details = () => {
     return JSON.parse(localStorage.getItem(USER_DETAILS_KEY))
 }
+
+/**
+ * Clear the auth token and user details and redirect to the given path
+ */
+export const clear_local_storage_replace_to = (path) => {
+    clear_auth_token()
+    clear_user_details()
+    window.location.replace(path)
+}

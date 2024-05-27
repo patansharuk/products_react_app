@@ -3,7 +3,7 @@ import CustomNavbar from "../Navbar/navbar";
 import Alert from "react-bootstrap/Alert";
 import ProductItem from "../ProductItem/product_item";
 import { Container, Row } from "react-bootstrap";
-import { get_auth_token } from "../../utils/authUtils";
+import { clear_local_storage_replace_to, get_auth_token } from "../../utils/authUtils";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -26,7 +26,7 @@ const Products = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.errors) {
-            window.location.replace("/login");
+            clear_local_storage_replace_to("/login");
           } else {
             setMessage("fetched data successfully!");
             setProducts(data);
