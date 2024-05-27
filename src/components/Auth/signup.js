@@ -3,14 +3,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Alert, Col, Container, Row } from "react-bootstrap";
 import { add_auth_token, add_user_details, get_auth_token } from "../../utils/authUtils";
-
-const redirect_to_back = () => {
-  if (window.location.href.includes("signup")) {
-    window.location.replace("/");
-  } else {
-    window.history.back();
-  }
-};
+import { redirect_to_prev } from "../../utils/redirectUtils";
+import { ProductsApi } from "../../utils/urlUtils";
 
 const Signup = () => {
   const [message, setMessage] = useState("");
@@ -21,7 +15,7 @@ const Signup = () => {
   useEffect(() => {
     const jwt_token = get_auth_token();
     if (jwt_token !== null) {
-      redirect_to_back();
+      redirect_to_prev();
     }
   }, []);
 
@@ -33,7 +27,7 @@ const Signup = () => {
         password: password,
       },
     };
-    const login_url = "http://localhost:3002/signup";
+    const signup_url = ProductsApi.signup_url();
     const options = {
       method: "post",
       headers: {
@@ -42,7 +36,7 @@ const Signup = () => {
       },
       body: JSON.stringify(payload),
     };
-    fetch(login_url, options)
+    fetch(signup_url, options)
       .then((res) => {
         return res.json();
       })
@@ -52,7 +46,7 @@ const Signup = () => {
         } else {
           add_user_details(data.resource);
           add_auth_token(data.token);
-          redirect_to_back();
+          redirect_to_prev();
         }
       })
       .catch((e) => console.log(e));
@@ -61,7 +55,7 @@ const Signup = () => {
   return (
     <Container>
       <Row className="pt-5">
-        <Col lg="6" className="m-auto">
+        <Col md="6" className="m-auto">
           <h1 className="text-center mb-5">Register Account</h1>
           {message && (
             <Alert key={"danger"} variant={"danger"}>
@@ -103,7 +97,7 @@ const Signup = () => {
             </Form.Group>
             <Row>
               <Col sm="8">
-                <Button variant="success" type="submit" className="w-100">
+                <Button variant="success" type="submit" className="w-100 mb-3">
                   Create
                 </Button>
               </Col>

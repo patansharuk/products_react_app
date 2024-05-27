@@ -2,14 +2,8 @@ import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { add_auth_token, add_user_details, get_auth_token } from "../../utils/authUtils";
-
-const redirect_to_back = () => {
-  if (window.location.href.includes("login")) {
-    window.location.replace("/");
-  } else {
-    window.history.back();
-  }
-};
+import { redirect_to_prev } from "../../utils/redirectUtils";
+import { ProductsApi } from "../../utils/urlUtils";
 
 const Login = () => {
   const [message, setMessage] = useState("");
@@ -20,7 +14,7 @@ const Login = () => {
   useEffect(() => {
     const jwt_token = get_auth_token();
     if (jwt_token !== null) {
-      redirect_to_back();
+      redirect_to_prev();
     }
   }, []);
 
@@ -32,7 +26,7 @@ const Login = () => {
         password: password,
       },
     };
-    const login_url = "http://localhost:3002/login";
+    const login_url = ProductsApi.login_url();
     const options = {
       method: "post",
       headers: {
@@ -51,7 +45,7 @@ const Login = () => {
         } else {
           add_user_details(data.resource);
           add_auth_token(data.token);
-          redirect_to_back();
+          redirect_to_prev();
         }
       })
       .catch((e) => console.log(e));
@@ -60,7 +54,7 @@ const Login = () => {
   return (
     <Container>
       <Row className="pt-5">
-        <Col lg="6" className="m-auto">
+        <Col md="6" className="m-auto">
           <h1 className="text-center mb-5">Login</h1>
           {message && (
             <Alert key={"danger"} variant={"danger"}>
@@ -99,7 +93,7 @@ const Login = () => {
             </Form.Group>
             <Row>
               <Col sm="8">
-                <Button variant="warning" type="submit" className="w-100">
+                <Button variant="warning" type="submit" className="w-100 mb-3">
                   Login
                 </Button>
               </Col>
