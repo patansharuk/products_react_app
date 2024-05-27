@@ -1,8 +1,9 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import { Button } from "react-bootstrap";
 import { clear_local_storage_replace_to, get_user_details, get_auth_token } from "../../utils/authUtils";
 import { ProductsApi } from "../../utils/urlUtils";
+import Leftnavbar from "./leftnavbar";
+import Menu from "./menu";
 
 const CustomNavbar = () => {
   const user_details = get_user_details() || {};
@@ -37,17 +38,16 @@ const CustomNavbar = () => {
   return (
     <Navbar className="bg-body-tertiary" data-bs-theme="dark">
       <Container>
-        <Navbar.Brand href="#home">Products - React</Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text>
-            Signed in as:{" "}
-            <span className="badge bg-info">{user_details.email}</span>
-          </Navbar.Text>
-        </Navbar.Collapse>
-        <Button variant="danger" className="ms-2" onClick={make_logout}>
-          Logout
-        </Button>
+        <div>
+          <Navbar.Brand href="#home">Products - React</Navbar.Brand>
+          <Navbar.Toggle />
+        </div>
+        <div className="d-none d-md-flex">
+          <Menu user_details={user_details} make_logout={make_logout} />
+        </div>
+        <div className="d-md-none">
+          <Leftnavbar user_details={user_details} make_logout={make_logout}/>
+        </div>
       </Container>
     </Navbar>
   );
