@@ -10,6 +10,11 @@ export const LOGOUT_PATH = '/logout'
 
 export const NOT_FOUND_PATH = '/notfound'
 
+/**
+ * API Routes related to Server
+ * @example
+ * ProductsApi.login_url()
+ */
 export class ProductsApi{
     static domain = 'http://localhost:3002/'
 
