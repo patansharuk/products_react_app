@@ -1,7 +1,7 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { Button } from "react-bootstrap";
-import { clear_local_storage_replace_to, get_user_details } from "../../utils/authUtils";
+import { clear_local_storage_replace_to, get_user_details, get_auth_token } from "../../utils/authUtils";
 import { ProductsApi } from "../../utils/urlUtils";
 
 const CustomNavbar = () => {
