@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { withConsole } from "@storybook/addon-console";
 /** @type { import('@storybook/react').Preview } */
 const preview = {
   parameters: {
@@ -9,6 +10,7 @@ const preview = {
       },
     },
   },
+  decorators: [(storyFn, context) => withConsole()(storyFn)(context), ]
 };
 
 export default preview;
