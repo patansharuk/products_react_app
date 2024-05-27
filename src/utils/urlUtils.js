@@ -20,4 +20,12 @@ export class ProductsApi{
     static signup_url(){
         return this.domain + 'signup'
     }
+
+    static logout_url(){
+        return this.domain + 'logout'
+    }
+
+    static products_url(){
+        return this.domain + 'products'
+    }
 }

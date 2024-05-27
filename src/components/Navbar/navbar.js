@@ -1,14 +1,15 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { Button } from "react-bootstrap";
-import { clear_auth_token, clear_user_details, get_auth_token, get_user_details } from "../../utils/authUtils";
+import { clear_local_storage_replace_to, get_user_details } from "../../utils/authUtils";
+import { ProductsApi } from "../../utils/urlUtils";
 
 const CustomNavbar = () => {
   const user_details = get_user_details() || {};
 
   const make_logout = () => {
     const token = get_auth_token();
-    const logout_url = "http://localhost:3002/logout";
+    const logout_url = ProductsApi.logout_url();
     const options = {
       method: "delete",
       headers: {
@@ -28,9 +29,7 @@ const CustomNavbar = () => {
         return res.json();
       })
       .then(() => {
-        clear_auth_token()
-        clear_user_details()
-        window.location.replace("/login");
+        clear_local_storage_replace_to("/login");
       })
       .catch((e) => console.log(e));
   };

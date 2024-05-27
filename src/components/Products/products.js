@@ -4,6 +4,8 @@ import Alert from "react-bootstrap/Alert";
 import ProductItem from "../ProductItem/product_item";
 import { Container, Row } from "react-bootstrap";
 import { clear_local_storage_replace_to, get_auth_token } from "../../utils/authUtils";
+import { ProductsApi } from "../../utils/urlUtils";
+import { redirect_to_login } from "../../utils/redirectUtils";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -11,10 +13,10 @@ const Products = () => {
   useEffect(() => {
     const fetch_products = () => {
       const token = get_auth_token();
-      if (token == null) {
-        window.location.replace("/login");
+      if (token === null) {
+        redirect_to_login()
       }
-      const products_url = "http://localhost:3002/products";
+      const products_url = ProductsApi.products_url();
       const products_options = {
         headers: {
           "Content-Type": "application/json",
