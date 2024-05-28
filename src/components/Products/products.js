@@ -6,6 +6,7 @@ import { Container, Row } from "react-bootstrap";
 import { clear_local_storage_replace_to, get_auth_token } from "../../utils/authUtils";
 import { ProductsApi } from "../../utils/urlUtils";
 import { redirect_to_login } from "../../utils/redirectUtils";
+import AlertDismissible from "../CustomAlert/customAlert";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -42,13 +43,9 @@ const Products = () => {
   return (
     <>
       <CustomNavbar />
-      {message && (
-        <Alert key={"success"} variant={"success"}>
-          {message}
-        </Alert>
-      )}
       <Container>
-        <Row>
+        <AlertDismissible children={message}/>
+        <Row className="mt-2">
           {products.map((product) => {
             return <ProductItem product={product} key={product.id} />;
           })}
