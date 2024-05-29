@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Navbar } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import NavLinks from "./navlinks";
 
 const Leftnavbar = ({ user_details, make_logout }) => {
   const [show, setShow] = useState(false);
@@ -27,7 +27,9 @@ const Leftnavbar = ({ user_details, make_logout }) => {
         <Offcanvas.Body>
           Signed in as:{" "}
           <span className="badge bg-info">{user_details.email}</span>
-          <hr className="d-md-none" />
+          <hr />
+          <NavLinks/>
+          <hr />
           <Button variant="danger" className="ms-2" onClick={make_logout}>
             Logout
           </Button>
