@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from "react";
 import CustomNavbar from "../Navbar/navbar";
-import Alert from "react-bootstrap/Alert";
 import ProductItem from "../ProductItem/product_item";
-import { Container, Row, Spinner } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import {
   clear_local_storage_replace_to,
-  get_auth_token,
+  fetch_token_else_redirect_login,
 } from "../../utils/authUtils";
 import { ProductsApi } from "../../utils/urlUtils";
-import { redirect_to_login } from "../../utils/redirectUtils";
 import AlertDismissible from "../CustomAlert/customAlert";
-import ItemNotFound from "../ItemNotFound/itemNotFound";
+import GlobalComponents from "../_Global";
 
-const states = {
-  api_error: "API_ERROR",
-  loading: "LOADING",
-  products: "PRODUCTS",
-  empty_items: "EMPTY_ITEMS",
-};
+const states = GlobalComponents.states;
 
 const Products = () => {
   const [state, setState] = useState(states.loading);
@@ -27,10 +20,7 @@ const Products = () => {
   useEffect(() => {
     const fetch_products = () => {
       setState(states.loading);
-      const token = get_auth_token();
-      if (token === null) {
-        redirect_to_login();
-      }
+      const token = fetch_token_else_redirect_login();
       const products_url = ProductsApi.products_url();
       const products_options = {
         headers: {
@@ -41,21 +31,16 @@ const Products = () => {
       };
       fetch(products_url, products_options)
         .then((res) => {
-          if (res.ok) {
-            res.json();
+          if (res.status === 401) {
+            clear_local_storage_replace_to("/login");
           } else {
-            setState(states.api_error);
-            throw "Routing error";
+            return res.json();
           }
         })
         .then((data) => {
-          if (data.errors) {
-            clear_local_storage_replace_to("/login");
-          } else {
-            setMessage("fetched data successfully!");
-            setProducts(data);
-            setState(states.products);
-          }
+          setMessage(data.message);
+          setProducts(data.data);
+          setState(states.products);
         })
         .catch((e) => console.log(e));
     };
@@ -73,35 +58,11 @@ const Products = () => {
     </Container>
   );
 
-  const renderSpinner = () => (
-    <div className="d-flex justify-content-center">
-      <Spinner animation="border" className="text-center m-5" />
-    </div>
-  );
-
-  const renderApiError = () => (
-    <Alert variant="danger" className="container m-auto mt-2">
-      Something went wrong! Try after sometime.
-    </Alert>
-  );
-
-  const renderComponent = () => {
-    switch (state) {
-      case states.loading:
-        return renderSpinner();
-      case states.api_error:
-        return renderApiError();
-      case states.empty_items:
-        return <ItemNotFound />;
-      default:
-        renderProducts();
-    }
-  };
-
   return (
     <>
       <CustomNavbar />
-      {renderComponent()}
+      <Container>{GlobalComponents.renderTitleDivider("Products")}</Container>
+      {GlobalComponents.renderComponent(state, renderProducts)}
     </>
   );
 };
