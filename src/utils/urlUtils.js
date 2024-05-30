@@ -34,3 +34,15 @@ export class ProductsApi{
         return this.domain + 'products'
     }
 }
+
+export class DealerDetailsApi{
+    static domain = 'http://localhost:3002/'
+
+    static dealer_details_url(){
+        return this.domain + 'dealer_details'
+    }
+
+    static show_dealer_detail_url(id){
+        return this.domain + `dealer_details/${id}`
+    }
+}
