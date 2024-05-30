@@ -2,14 +2,22 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Alert, Col, Container, Row } from "react-bootstrap";
-import { add_auth_token, add_user_details, get_auth_token } from "../../utils/authUtils";
+import {
+  add_auth_token,
+  add_user_details,
+  get_auth_token,
+} from "../../utils/authUtils";
 import { redirect_to_prev } from "../../utils/redirectUtils";
 import { ProductsApi } from "../../utils/urlUtils";
+
+const PASSWORD_STATUS = { check: "Check Password", hide: "hide Password" };
 
 const Signup = () => {
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [isDealer, setIsDealer] = useState(false);
   const [shouldShowPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
@@ -25,6 +33,8 @@ const Signup = () => {
       user: {
         email: email,
         password: password,
+        name: name,
+        role: isDealer ? 'dealer' : 'customer',
       },
     };
     const signup_url = ProductsApi.signup_url();
@@ -63,6 +73,17 @@ const Signup = () => {
             </Alert>
           )}
           <Form onSubmit={make_sighup}>
+            <Form.Group className="mb-3" controlId="formBasicText">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Name"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -90,9 +111,21 @@ const Signup = () => {
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check
                 type="checkbox"
-                label="Check me out"
+                label={
+                  shouldShowPassword
+                    ? PASSWORD_STATUS.hide
+                    : PASSWORD_STATUS.check
+                }
                 checked={shouldShowPassword}
                 onChange={() => setShowPassword(!shouldShowPassword)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicCheckbox1">
+              <Form.Check
+                type="checkbox"
+                label="Are you a dealer ?"
+                checked={isDealer}
+                onChange={() => setIsDealer(!isDealer)}
               />
             </Form.Group>
             <Row>
@@ -102,7 +135,12 @@ const Signup = () => {
                 </Button>
               </Col>
               <Col>
-                <Button variant="warning" type="submit" className="w-100" href="/login">
+                <Button
+                  variant="warning"
+                  type="submit"
+                  className="w-100"
+                  href="/login"
+                >
                   Login
                 </Button>
               </Col>
