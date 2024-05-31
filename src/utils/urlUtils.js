@@ -33,6 +33,10 @@ export class ProductsApi{
     static products_url(){
         return this.domain + 'products'
     }
+
+    static dealer_products_url(id){
+        return this.domain + `dealer_details/${id}/products`
+    }
 }
 
 export class DealerDetailsApi{
