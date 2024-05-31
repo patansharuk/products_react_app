@@ -9,6 +9,7 @@ import {
 import { ProductsApi } from "../../utils/urlUtils";
 import AlertDismissible from "../CustomAlert/customAlert";
 import GlobalComponents from "../_Global";
+import CartItemsUtil from "../../utils/cartUtils";
 
 const states = GlobalComponents.states;
 
@@ -47,12 +48,38 @@ const Products = () => {
     fetch_products();
   }, []);
 
+  const onAddProduct = (id) => {
+    const mod_products = products.map((product) => {
+      if (product.id === id) {
+        return { ...product, quantity: 1 };
+      }
+      return product;
+    });
+    const modCartItems = mod_products.filter((product) => product.quantity !== undefined)
+    CartItemsUtil.addCartItems(modCartItems);
+    setProducts(mod_products);
+  };
+
+  const incrementProduct = (product_id) => {
+    const filtered_product = products.filter(
+      (product) => product.id === product_id
+    );
+  };
+
+  const decrementProduct = () => {};
+
   const renderProducts = () => (
     <Container>
       <AlertDismissible children={message} />
       <Row className="mt-2">
         {products.map((product) => {
-          return <ProductItem product={product} key={product.id} />;
+          return (
+            <ProductItem
+              product={product}
+              key={product.id}
+              onAddProduct={onAddProduct}
+            />
+          );
         })}
       </Row>
     </Container>

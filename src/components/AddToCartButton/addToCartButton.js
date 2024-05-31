@@ -1,22 +1,21 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-const AddToCartButton = ({ product }) => {
+const AddToCartButton = ({ product, onAddProduct }) => {
   const renderIncrementButton = () => {
     return <Button variant="primary">+</Button>;
   };
 
   const renderDecrementButton = () => {
-    let should_disable = product.quantity === 1 ? "disabled" : "";
     return (
-      <Button variant="primary" className={should_disable}>
+      <Button variant="primary">
         -
       </Button>
     );
   };
 
   const renderAddButton = () => {
-    return <Button variant="primary">Add to Cart</Button>;
+    return <Button variant="primary" onClick={()=>onAddProduct(product.id)}>Add to Cart</Button>;
   };
 
   const renderComponent = () => {

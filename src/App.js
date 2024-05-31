@@ -1,4 +1,4 @@
-import { Route, BrowserRouter, Routes } from "react-router-dom";
+import { Route, BrowserRouter, Routes, Navigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./components/Auth/login";
 import Home from "./components/Home/home";
@@ -9,13 +9,8 @@ import DealerDetails from "./components/Dealer/dealerDetails";
 import EditDealerDetail from "./components/Dealer/editDealerDetail";
 import ShowDealerDetail from "./components/Dealer/showDealerDetail";
 import Cart from "./components/Cart/cart";
-import { fetch_token_else_redirect_login } from "./utils/authUtils";
 
 const App = () => {
-  const check_for_authentication = () => {
-    fetch_token_else_redirect_login();
-  };
-
   const renderAuthenticationRoutes = () => (
     <>
       <Route path="/login" element={<Login />} />
@@ -51,7 +46,6 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         {renderAuthenticationRoutes()}
-        {check_for_authentication()}
 
         {renderRootRoute()}
 
