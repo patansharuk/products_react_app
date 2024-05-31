@@ -20,7 +20,7 @@ const DealerDetails = () => {
   useEffect(() => {
     const fetch_dealers = () => {
       setState(states.loading);
-      const token = fetch_token_else_redirect_login()
+      const token = fetch_token_else_redirect_login();
       const dealers_url = DealerDetailsApi.dealer_details_url();
       const dealers_options = {
         headers: {
@@ -31,23 +31,21 @@ const DealerDetails = () => {
       };
       fetch(dealers_url, dealers_options)
         .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
+          if (res.status === 401) {
+            clear_local_storage_replace_to("/login");
+          } else if (res.status === 404) {
             setState(states.api_error);
-            throw "Routing error";
+            throw Error("Api error");
+          } else {
+            return res.json();
           }
         })
         .then((data) => {
-          if (data.errors) {
-            clear_local_storage_replace_to("/login");
-          } else {
-            setMessage(data.message);
-            setDealerDetails(data.data);
-            data.data.length > 0
-              ? setState(states.data)
-              : setState(states.empty_items);
-          }
+          setMessage(data.message);
+          setDealerDetails(data.data);
+          data.data.length > 0
+            ? setState(states.data)
+            : setState(states.empty_items);
         })
         .catch((e) => console.log(e));
     };
