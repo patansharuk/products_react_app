@@ -1,5 +1,8 @@
 import { Alert, Spinner } from "react-bootstrap";
 
+/**
+ * Contains methods and variable which are needed for globally in the application
+ */
 class GlobalComponents {
   static states = {
     api_error: "API_ERROR",
@@ -32,16 +35,16 @@ class GlobalComponents {
    * Display not found view
    * @returns JSX
    */
-  static renderNotFoundItem = () => {
+  static renderNotFoundItem = () => (
     <div className="d-flex justify-content-center mt-5">
       <h1>ItemNotFound</h1>
-    </div>;
-  };
+    </div>
+  );
 
   /**
    * Handles loader view, api error view, empty items view and data view
-   * @param {string} state 
-   * @param {Function} comp 
+   * @param {string} state
+   * @param {Function} comp
    * @returns JSX Component
    * @example
    * GlobalComponents.renderComponent('LOADING', () => (<h1>Data</h1>))
@@ -61,13 +64,13 @@ class GlobalComponents {
 
   /**
    * Display Title with bottom border.
-   * @param {string} title 
+   * @param {string} title
    * @returns JSX
    */
-  static renderTitleDivider = (title='') => (
-    <div >
+  static renderTitleDivider = (title = "") => (
+    <div>
       <h1>{title}</h1>
-      <hr className="border border-danger-subtle border-3 m-0"/>
+      <hr className="border border-danger-subtle border-3 m-0" />
     </div>
   );
 }
