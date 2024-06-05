@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CustomNavbar from "../Navbar/navbar";
 import { useParams } from "react-router-dom";
-import { DealerDetailsApi } from "../../utils/urlUtils";
+import { StoresApi } from "../../utils/urlUtils";
 import { Card, Container, ListGroup, Row } from "react-bootstrap";
 import AlertDismissible from "../CustomAlert/customAlert";
 import {
@@ -10,69 +10,75 @@ import {
 } from "../../utils/authUtils";
 import { faker } from "@faker-js/faker";
 import GlobalComponent from "../_Global";
-import fetchDealerProducts from "../../Fetching/Products/fetchDealerProducts";
+import fetchStoreProducts from "../../Fetching/Products/fetchStoreProducts";
 
 const states = GlobalComponent.states;
 
-const ShowDealerDetail = () => {
+const ShowStore = () => {
   const [productsState, setProductsState] = useState(states.loading);
-  const [dealerProducts, setDealerProducts] = useState([]);
+  const [storeProducts, setStoreProducts] = useState([]);
   const [productsMessage, setProductsMessage] = useState("");
 
-  const [dealerDetailId] = useState(useParams().id);
+  const [storeId] = useState(useParams().id);
   const [state, setState] = useState(states.loading);
-  const [dealerDetail, setDealerDetail] = useState({});
+  const [store, setStore] = useState({});
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const fetch_dealer_detail = () => {
+    const fetch_store = () => {
       setState(states.loading);
       const token = fetch_token_else_redirect_login();
-      const dealers_url =
-        DealerDetailsApi.show_dealer_detail_url(dealerDetailId);
-      const dealers_options = {
+      const store_url = StoresApi.show_store_url(storeId);
+      const options = {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
-      fetch(dealers_url, dealers_options)
+      fetch(store_url, options)
         .then((res) => {
           res.status === 401 && clear_local_storage_replace_to("/login");
-          //   if (!res.ok) {
-          //     setState(states.api_error);
-          //     throw "Routing error";
-          //   }
-          return res.json();
+          if (res.status === 404) {
+            setState(states.api_error);
+            throw new Error("Routing error");
+          } else {
+            return res.json();
+          }
         })
         .then((data) => {
-          setMessage(data.message);
-          setDealerDetail(data.data);
-          Object.values(data.data).length > 0
-            ? setState(states.dealer_detail)
-            : setState(states.empty_items);
+          data.message && setMessage(data.message);
+          if (data.data) {
+            setStore(data.data);
+            Object.values(data.data).length > 0
+              ? setState(states.dealer_detail)
+              : setState(states.empty_items);
+          }
         })
         .catch((e) => console.log(e));
     };
-    fetch_dealer_detail();
-    const fetch_dealer_detail_products = async () => {
+    fetch_store();
+
+    const fetch_store_products = async () => {
       setProductsState(states.loading);
       const token = fetch_token_else_redirect_login();
-      const data = await fetchDealerProducts(token);
-      console.log(data);
+      const data = await fetchStoreProducts(token, storeId);
+
+      if (data?.status === 404) {
+        setProductsState(states.api_error);
+      }
       if (data.data) {
-        setDealerProducts(data.data);
+        setStoreProducts(data.data);
         setProductsState(states.data);
       }
       if (data.message) {
         setProductsMessage(data.message);
       }
     };
-    fetch_dealer_detail_products();
+    fetch_store_products();
   }, []);
 
-  const renderDealerDetail = () => (
+  const renderStore = () => (
     <Container>
       <AlertDismissible children={message} />
       <Row className="mt-2">
@@ -83,32 +89,32 @@ const ShowDealerDetail = () => {
             height={200}
           />
           <Card.Body>
-            <Card.Title>{dealerDetail.name}</Card.Title>
+            <Card.Title>{store.name}</Card.Title>
           </Card.Body>
           <ListGroup className="list-group-flush">
             <ListGroup.Item>
               <span className="fw-bold">Loaction: </span>
-              {dealerDetail.location}
+              {store.location}
             </ListGroup.Item>
             <ListGroup.Item>
               <span className="fw-bold">Rating: </span>
-              {dealerDetail.rating}
+              {store.rating}
             </ListGroup.Item>
           </ListGroup>
           <Card.Body>
-            <Card.Link href="#">Card Link</Card.Link>
-            <Card.Link href="#">Another Link</Card.Link>
+            <Card.Link href={`/stores/${storeId}/product/create`}>Add Product</Card.Link>
+            <Card.Link href={`/stores/${storeId}/edit`}>Edit Store</Card.Link>
           </Card.Body>
         </Card>
       </Row>
     </Container>
   );
 
-  const renderDealerProducts = () => (
+  const renderStoreProducts = () => (
     <Container>
       <AlertDismissible children={productsMessage} />
       <Row className="mt-2">
-        {dealerProducts.map((product) => (
+        {storeProducts.map((product) => (
           <Card className="col-md-6 col-lg-4 m-auto mb-2">
             <Card.Img
               variant="top"
@@ -117,23 +123,17 @@ const ShowDealerDetail = () => {
             />
             <Card.Body>
               <Card.Title>{product.title}</Card.Title>
-              <Card.Text>
-                {product.description}
-              </Card.Text>
+              <Card.Text>{product.description}</Card.Text>
             </Card.Body>
             <ListGroup className="list-group-flush">
-              <ListGroup.Item>
-                <span className="fw-bold">Loaction: </span>
-                {dealerDetail.location}
-              </ListGroup.Item>
               <ListGroup.Item>
                 <span className="fw-bold">Price: </span>
                 {product.price}
               </ListGroup.Item>
             </ListGroup>
             <Card.Body>
-              <Card.Link href="#">Card Link</Card.Link>
-              <Card.Link href="#">Another Link</Card.Link>
+              <Card.Link href="#">Edit</Card.Link>
+              <Card.Link href="#">Delete</Card.Link>
             </Card.Body>
           </Card>
         ))}
@@ -144,18 +144,16 @@ const ShowDealerDetail = () => {
   return (
     <>
       <CustomNavbar />
-      <Container>
-        {GlobalComponent.renderTitleDivider("Dealer Detail")}
-      </Container>
-      {GlobalComponent.renderComponent(state, renderDealerDetail)}
+      <Container>{GlobalComponent.renderTitleDivider("Store")}</Container>
+      {GlobalComponent.renderComponent(state, renderStore)}
 
       <Container>
         <hr />
-        {GlobalComponent.renderTitleDivider("Dealer Products")}
+        {GlobalComponent.renderTitleDivider("Store Products")}
       </Container>
-      {GlobalComponent.renderComponent(productsState, renderDealerProducts)}
+      {GlobalComponent.renderComponent(productsState, renderStoreProducts)}
     </>
   );
 };
 
-export default ShowDealerDetail;
+export default ShowStore;

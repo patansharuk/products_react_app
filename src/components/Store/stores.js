@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from "react";
 import CustomNavbar from "../Navbar/navbar";
-import DealerDetailItem from "./dealerDetailItem";
 import { Container, Row } from "react-bootstrap";
 import {
   clear_local_storage_replace_to,
   fetch_token_else_redirect_login,
 } from "../../utils/authUtils";
-import { DealerDetailsApi } from "../../utils/urlUtils";
+import { StoresApi } from "../../utils/urlUtils";
 import AlertDismissible from "../CustomAlert/customAlert";
 import GlobalComponents from "../_Global";
+import StoreItem from "./storeItem";
 
 const states = GlobalComponents.states;
 
-const DealerDetails = () => {
+const Stores = () => {
   const [state, setState] = useState(states.loading);
-  const [dealer_details, setDealerDetails] = useState([]);
+  const [stores, setStores] = useState([]);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const fetch_dealers = () => {
+    const fetch_stores = () => {
       setState(states.loading);
       const token = fetch_token_else_redirect_login();
-      const dealers_url = DealerDetailsApi.dealer_details_url();
-      const dealers_options = {
+      const stores_url = StoresApi.stores_url();
+      const options = {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
-      fetch(dealers_url, dealers_options)
+      fetch(stores_url, options)
         .then((res) => {
           if (res.status === 401) {
             clear_local_storage_replace_to("/login");
@@ -42,24 +42,24 @@ const DealerDetails = () => {
         })
         .then((data) => {
           setMessage(data.message);
-          setDealerDetails(data.data);
+          setStores(data.data);
           data.data.length > 0
             ? setState(states.data)
             : setState(states.empty_items);
         })
         .catch((e) => console.log(e));
     };
-    fetch_dealers();
+    fetch_stores();
   }, []);
 
-  const renderDealerDetails = () => (
+  const renderStores = () => (
     <Container>
       <AlertDismissible children={message} />
       <Row className="mt-2">
-        {dealer_details.map((dealer_detail) => (
-          <DealerDetailItem
-            dealer_detail={dealer_detail}
-            key={dealer_detail.id}
+        {stores.map((store) => (
+          <StoreItem
+            store={store}
+            key={store.id}
           />
         ))}
       </Row>
@@ -70,11 +70,11 @@ const DealerDetails = () => {
     <>
       <CustomNavbar />
       <Container>
-        {GlobalComponents.renderTitleDivider("Dealer Details")}
+        {GlobalComponents.renderTitleDivider("Stores")}
       </Container>
-      {GlobalComponents.renderComponent(state, renderDealerDetails)}
+      {GlobalComponents.renderComponent(state, renderStores)}
     </>
   );
 };
 
-export default DealerDetails;
+export default Stores;

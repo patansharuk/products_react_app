@@ -7,10 +7,10 @@ const NavLinks = () => (
       <Nav.Link href="/">Home</Nav.Link>
     </Nav.Item>
     <Nav.Item>
-      <Nav.Link href="/dealer_details">Dealers</Nav.Link>
+      <Nav.Link href="/stores">Stores</Nav.Link>
     </Nav.Item>
     <Nav.Item>
-      <Nav.Link href="/products">Products</Nav.Link>
+      <Nav.Link href="/stores/products">Products</Nav.Link>
     </Nav.Item>
     <Nav.Item>
       <Nav.Link href="/cart">Cart</Nav.Link>

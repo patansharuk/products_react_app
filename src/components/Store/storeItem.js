@@ -3,23 +3,23 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { faker } from "@faker-js/faker";
 
-const DealerDetailItem = ({ dealer_detail }) => (
+const StoreItem = ({ store }) => (
   <Col sm="12" md="6" lg="4" className="mb-3">
     <Card style={{ width: "18rem" }} className="w-100">
       <Card.Img variant="top" src={faker.image.urlPicsumPhotos()} />
       <Card.Body>
-        <Card.Title className="text-truncate">{dealer_detail.name}</Card.Title>
+        <Card.Title className="text-truncate">{store.name}</Card.Title>
         <Card.Text className="text-truncate">
-          Location - {dealer_detail.location}
+          Location - {store.location}
         </Card.Text>
         <Card.Text className="text-truncate">
-          Rating - {dealer_detail.rating}
+          Rating - {store.rating}
         </Card.Text>
-        <Button variant="primary" href={`/dealer_detail/${dealer_detail.id}`}>View</Button>
+        <Button variant="primary" href={`/stores/${store.id}`}>View</Button>
         <Button variant="info">Edit</Button>
         <Button variant="danger">Delete</Button>
       </Card.Body>
     </Card>
   </Col>
 );
-export default DealerDetailItem;
+export default StoreItem;

@@ -5,12 +5,13 @@ import Home from "./components/Home/home";
 import Products from "./components/Products/products";
 import Signup from "./components/Auth/signup";
 import Swagger from "./components/Swagger/swagger";
-import DealerDetails from "./components/Dealer/dealerDetails";
-import EditDealerDetail from "./components/Dealer/editDealerDetail";
-import ShowDealerDetail from "./components/Dealer/showDealerDetail";
 import Cart from "./components/Cart/cart";
 import { get_auth_token } from "./utils/authUtils";
 import CreateProduct from "./components/Products/createProduct";
+import Stores from "./components/Store/stores";
+import CreateStore from "./components/Store/createStore";
+import EditStore from "./components/Store/editStore";
+import ShowStore from "./components/Store/showStore";
 
 const PrivateRoute = ({ element }) => {
   const token = get_auth_token();
@@ -28,34 +29,31 @@ const App = () => {
     </>
   );
 
-  const renderProductRoutes = () => (
+  const renderStoreRoutes = () => (
     <>
       <Route
-        path="/products"
+        path="/stores"
+        element={<PrivateRoute element={<Stores />} />}
+      />
+      <Route
+        path="/stores/profile"
+        element={<PrivateRoute element={<CreateStore />} />}
+      />
+      <Route
+        path="/stores/:id/edit"
+        element={<PrivateRoute element={<EditStore />} />}
+      />
+      <Route
+        path="/stores/:id"
+        element={<PrivateRoute element={<ShowStore />} />}
+      />
+      <Route
+        path="/stores/products"
         element={<PrivateRoute element={<Products />} />}
       />
       <Route
-        path="dealer_details/:id/product/create"
+        path="/stores/:id/product/create"
         element={<PrivateRoute element={<CreateProduct />} />}
-      />
-      {/* <Route path="/product/:id/edit" element={<EditProduct/>}/>
-        <Route path="/product/:id" element={<ViewProduct/>}/> */}
-    </>
-  );
-
-  const renderDealerRoutes = () => (
-    <>
-      <Route
-        path="/dealer_details"
-        element={<PrivateRoute element={<DealerDetails />} />}
-      />
-      <Route
-        path="/dealer_detail/:id/edit"
-        element={<PrivateRoute element={<EditDealerDetail />} />}
-      />
-      <Route
-        path="/dealer_detail/:id"
-        element={<PrivateRoute element={<ShowDealerDetail />} />}
       />
     </>
   );
@@ -78,8 +76,7 @@ const App = () => {
 
         {renderRootRoute()}
 
-        {renderDealerRoutes()}
-        {renderProductRoutes()}
+        {renderStoreRoutes()}
         {renderCartRoute()}
 
         {renderSwaggerRoute()}

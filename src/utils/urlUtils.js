@@ -34,23 +34,31 @@ export class ProductsApi {
     return this.domain + "products";
   }
 
-  static dealer_products_url(id) {
-    return this.domain + `dealer_details/${id}/products`;
-  }
-
   static create_dealer_product_url(id) {
-    return this.domain + `dealer_details/${id}/products`;
+    return this.domain + `stores/${id}/products`;
   }
 }
 
-export class DealerDetailsApi {
+export class StoresApi {
   static domain = "http://localhost:3002/";
 
-  static dealer_details_url() {
-    return this.domain + "dealer_details";
+  static stores_url() {
+    return this.domain + "stores";
   }
 
-  static show_dealer_detail_url(id) {
-    return this.domain + `dealer_details/${id}`;
+  static create_store_url() {
+    return this.domain + "stores";
+  }
+
+  static show_store_url(store_id) {
+    return this.domain + `stores/${store_id}`;
+  }
+
+  static stores_products() {
+    return this.domain + "stores/products";
+  }
+
+  static store_products_url(store_id) {
+    return this.domain + `stores/${store_id}/products`;
   }
 }

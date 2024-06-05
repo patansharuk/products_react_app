@@ -6,6 +6,7 @@ import { ProductsApi } from "../../utils/urlUtils";
 import {
   clear_local_storage_replace_to,
   get_auth_token,
+  get_user_details,
 } from "../../utils/authUtils";
 import GlobalComponents from "../_Global";
 import AlertDismissible from "../CustomAlert/customAlert";
@@ -22,7 +23,7 @@ const productInitialValues = {
 const CreateProduct = () => {
   const [state, setState] = useState(states.data);
   const [message, setMessage] = useState("");
-  const [dealerDetailId] = useState(useParams().id);
+  const [storeId] = useState(useParams().id);
   const [title, setTitle] = useState(productInitialValues.title);
   const [description, setDescription] = useState(
     productInitialValues.description
@@ -39,7 +40,7 @@ const CreateProduct = () => {
       price: price,
       image_url: imageUrl,
     };
-    const products_url = ProductsApi.create_dealer_product_url(dealerDetailId);
+    const products_url = ProductsApi.create_dealer_product_url(storeId);
     const products_options = {
       method: "post",
       headers: {
@@ -128,11 +129,21 @@ const CreateProduct = () => {
 
   const renderNothing = () => <span></span>;
 
+  if (get_user_details().role === "customer") {
+    return (
+      <Container>
+        <AlertDismissible>You have no access to add the product</AlertDismissible>
+      </Container>
+    );
+  }
+
   return (
     <>
       <CustomNavbar />
-      {GlobalComponents.renderTitleDivider("Create Product")}
-      <AlertDismissible>{message}</AlertDismissible>
+      <Container>
+        {GlobalComponents.renderTitleDivider("Create Product")}
+        <AlertDismissible>{message}</AlertDismissible>
+      </Container>
       {GlobalComponents.renderComponent(state, renderNothing)}
       {renderComponent()}
     </>

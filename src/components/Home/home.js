@@ -6,17 +6,17 @@ import AlertDismissible from "../CustomAlert/customAlert";
 import ProductItem from "../ProductItem/product_item";
 import { fetch_token_else_redirect_login } from "../../utils/authUtils";
 import GlobalComponents from "../_Global";
-import fetchDealerDetails from "../../Fetching/DealerDetails/fetchDealerDetails";
-import DealerDetailItem from "../Dealer/dealerDetailItem";
+import fetchStores from "../../Fetching/Store/fetchStores";
+import StoreItem from "../Store/storeItem";
 
 const states = GlobalComponents.states;
 
 const Home = () => {
   const [productsState, setProductsState] = useState(states.loading);
-  const [dealerDetailsState, setDealerDetailsState] = useState(states.loading);
+  const [storeState, setStoreState] = useState(states.loading);
   const [products, setProducts] = useState([]);
-  const [dealerDetails, setDealerDetails] = useState([]);
-  const [dealerDetailsMessage, setdealerDetailsMessage] = useState("");
+  const [stores, setStore] = useState([]);
+  const [storeMessage, setStoreMessage] = useState("");
   const [productsMessage, setProductsMessage] = useState("");
 
   useEffect(() => {
@@ -33,18 +33,18 @@ const Home = () => {
     };
     fetchingProducts();
 
-    const fetchingDealerDetails = async () => {
+    const fetchingStores = async () => {
       const token = fetch_token_else_redirect_login();
-      const data = await fetchDealerDetails(token);
+      const data = await fetchStores(token);
       if (data.data) {
-        setDealerDetails(data.data);
-        setDealerDetailsState(states.data);
+        setStore(data.data);
+        setStoreState(states.data);
       }
       if (data.message) {
-        setdealerDetailsMessage(data.message);
+        setStoreMessage(data.message);
       }
     };
-    fetchingDealerDetails();
+    fetchingStores();
   }, []);
 
   const finalProductsResult = () => (
@@ -55,15 +55,10 @@ const Home = () => {
     </Row>
   );
 
-  const finalDealerDetailsResult = () => (
+  const finalStoresResult = () => (
     <Row className="mt-2">
-      {dealerDetails.map((dealerDetail) => {
-        return (
-          <DealerDetailItem
-            dealer_detail={dealerDetail}
-            key={dealerDetail.id}
-          />
-        );
+      {stores.map((store) => {
+        return <StoreItem store={store} key={store.id} />;
       })}
     </Row>
   );
@@ -72,16 +67,13 @@ const Home = () => {
     <>
       <CustomNavbar />
       <Container>
-        {GlobalComponents.renderTitleDivider('Products')}
+        {GlobalComponents.renderTitleDivider("Products")}
         <AlertDismissible children={productsMessage} />
         {GlobalComponents.renderComponent(productsState, finalProductsResult)}
-        
-        {GlobalComponents.renderTitleDivider('Dealer Details')}
-        <AlertDismissible children={dealerDetailsMessage} />
-        {GlobalComponents.renderComponent(
-          dealerDetailsState,
-          finalDealerDetailsResult
-        )}
+
+        {GlobalComponents.renderTitleDivider("Stores")}
+        <AlertDismissible children={storeMessage} />
+        {GlobalComponents.renderComponent(storeState, finalStoresResult)}
       </Container>
     </>
   );
