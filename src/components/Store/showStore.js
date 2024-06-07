@@ -40,7 +40,7 @@ const ShowStore = () => {
         .then((res) => {
           res.status === 401 && clear_local_storage_replace_to("/login");
           if (res.status === 404) {
-            setState(states.api_error);
+            setState(states.empty_items);
             throw new Error("Routing error");
           } else {
             return res.json();
@@ -65,7 +65,7 @@ const ShowStore = () => {
       const data = await fetchStoreProducts(token, storeId);
 
       if (data?.status === 404) {
-        setProductsState(states.api_error);
+        setProductsState(states.empty_items);
       }
       if (data.data) {
         setStoreProducts(data.data);
@@ -102,7 +102,9 @@ const ShowStore = () => {
             </ListGroup.Item>
           </ListGroup>
           <Card.Body>
-            <Card.Link href={`/stores/${storeId}/product/create`}>Add Product</Card.Link>
+            <Card.Link href={`/stores/${storeId}/product/create`}>
+              Add Product
+            </Card.Link>
             <Card.Link href={`/stores/${storeId}/edit`}>Edit Store</Card.Link>
           </Card.Body>
         </Card>
@@ -147,10 +149,8 @@ const ShowStore = () => {
       <Container>{GlobalComponent.renderTitleDivider("Store")}</Container>
       {GlobalComponent.renderComponent(state, renderStore)}
 
-      <Container>
-        <hr />
-        {GlobalComponent.renderTitleDivider("Store Products")}
-      </Container>
+      <hr className="container" />
+      {GlobalComponent.renderTitleDivider("Store Products")}
       {GlobalComponent.renderComponent(productsState, renderStoreProducts)}
     </>
   );

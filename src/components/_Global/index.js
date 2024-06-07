@@ -1,4 +1,8 @@
 import { Alert, Spinner } from "react-bootstrap";
+import {
+  clear_local_storage_replace_to,
+  get_user_details,
+} from "../../utils/authUtils";
 
 /**
  * Contains methods and variable which are needed for globally in the application
@@ -26,7 +30,7 @@ class GlobalComponents {
    * @returns JSX
    */
   static renderApiError = () => (
-    <Alert variant="danger" className="container m-auto mt-2">
+    <Alert variant="danger" className="container m-auto mt-2 mb-2">
       Something went wrong! Try after sometime.
     </Alert>
   );
@@ -36,9 +40,9 @@ class GlobalComponents {
    * @returns JSX
    */
   static renderNotFoundItem = () => (
-    <div className="d-flex justify-content-center mt-5">
-      <h1>ItemNotFound</h1>
-    </div>
+    <Alert variant="danger" className="container m-auto mt-2 mb-2">
+      <h3 className="mb-0">Items Not Found</h3>
+    </Alert>
   );
 
   /**
@@ -68,11 +72,27 @@ class GlobalComponents {
    * @returns JSX
    */
   static renderTitleDivider = (title = "") => (
-    <div>
+    <div className="container mb-3">
       <h1>{title}</h1>
       <hr className="border border-danger-subtle border-3 m-0" />
     </div>
   );
+
+  static renderBasedOnRole = (views) => {
+    const user_details = get_user_details();
+    user_details === null && clear_local_storage_replace_to("/login");
+
+    switch (user_details.role) {
+      case "admin":
+        return views.admin;
+      case "dealer":
+        return views.dealer;
+      case "customer":
+        return views.customer;
+      default:
+        return <h1>default view</h1>;
+    }
+  };
 }
 
 export default GlobalComponents;

@@ -14,8 +14,11 @@ const fetchStores = (token) => {
     .then((res) => {
       if (res.status === 401) {
         clear_local_storage_replace_to("/login");
+      }else if(res.status === 404){
+        return {message: 'items not found', status: res.status}
+      }else{
+        return res.json()
       }
-      return res.json();
     })
     .catch((e) => console.log(e));
 };

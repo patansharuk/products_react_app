@@ -34,7 +34,7 @@ const Stores = () => {
           if (res.status === 401) {
             clear_local_storage_replace_to("/login");
           } else if (res.status === 404) {
-            setState(states.api_error);
+            setState(states.empty_items);
             throw Error("Api error");
           } else {
             return res.json();
