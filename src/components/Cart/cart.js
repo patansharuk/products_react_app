@@ -3,7 +3,6 @@ import CustomNavbar from "../Navbar/navbar";
 import GlobalComponents from "../_Global/index";
 import CartItemsUtil from "../../utils/cartUtils";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { add_user_details } from "../../utils/authUtils";
 
 const states = GlobalComponents.states;
 

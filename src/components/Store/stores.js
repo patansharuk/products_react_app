@@ -6,7 +6,6 @@ import {
   fetch_token_else_redirect_login,
 } from "../../utils/authUtils";
 import { StoresApi } from "../../utils/urlUtils";
-import AlertDismissible from "../CustomAlert/customAlert";
 import GlobalComponents from "../_Global";
 import StoreItem from "./storeItem";
 
@@ -15,7 +14,6 @@ const states = GlobalComponents.states;
 const Stores = () => {
   const [state, setState] = useState(states.loading);
   const [stores, setStores] = useState([]);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetch_stores = () => {
@@ -41,7 +39,6 @@ const Stores = () => {
           }
         })
         .then((data) => {
-          setMessage(data.message);
           setStores(data.data);
           data.data.length > 0
             ? setState(states.data)

@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CustomNavbar from "../Navbar/navbar";
-import fetchProducts from "../../Fetching/Products/fetchProducts";
 import { Carousel, Col, Container, Row } from "react-bootstrap";
-import AlertDismissible from "../CustomAlert/customAlert";
-import ProductItem from "../ProductItem/product_item";
 import {
-  fetch_token_else_redirect_login,
   get_user_details,
 } from "../../utils/authUtils";
 import GlobalComponents from "../_Global";
-import fetchStores from "../../Fetching/Store/fetchStores";
-import StoreItem from "../Store/storeItem";
 import DealerAnalyticsSection from "./dealerAnalyticsSection";
 import AdminAnalyticsSection from "./adminAnalyticsSection";
 

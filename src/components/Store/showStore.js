@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import CustomNavbar from "../Navbar/navbar";
 import { useParams } from "react-router-dom";
 import { StoresApi } from "../../utils/urlUtils";
-import { Card, Container, ListGroup, Row } from "react-bootstrap";
+import { Card, Container, Row } from "react-bootstrap";
 import {
   clear_local_storage_replace_to,
   fetch_token_else_redirect_login,
 } from "../../utils/authUtils";
-import { faker } from "@faker-js/faker";
 import GlobalComponent from "../_Global";
 import fetchStoreProducts from "../../Fetching/Products/fetchStoreProducts";
 import StoreItem from "./storeItem";
@@ -18,12 +17,10 @@ const states = GlobalComponent.states;
 const ShowStore = () => {
   const [productsState, setProductsState] = useState(states.loading);
   const [storeProducts, setStoreProducts] = useState([]);
-  const [productsMessage, setProductsMessage] = useState("");
 
   const [storeId] = useState(useParams().id);
   const [state, setState] = useState(states.loading);
   const [store, setStore] = useState({});
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetch_store = () => {
@@ -48,7 +45,6 @@ const ShowStore = () => {
           }
         })
         .then((data) => {
-          data.message && setMessage(data.message);
           if (data.data) {
             setStore(data.data);
             Object.values(data.data).length > 0
@@ -71,9 +67,6 @@ const ShowStore = () => {
       if (data.data) {
         setStoreProducts(data.data);
         setProductsState(states.data);
-      }
-      if (data.message) {
-        setProductsMessage(data.message);
       }
     };
     fetch_store_products();

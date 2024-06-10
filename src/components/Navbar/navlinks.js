@@ -1,6 +1,6 @@
 import React from "react";
 import { Nav } from "react-bootstrap";
-import { is_customer, is_dealer } from "../../utils/authUtils";
+import { is_customer } from "../../utils/authUtils";
 
 const NavLinks = () => (
   <Nav>
