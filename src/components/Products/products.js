@@ -7,7 +7,6 @@ import {
   fetch_token_else_redirect_login,
 } from "../../utils/authUtils";
 import { ProductsApi } from "../../utils/urlUtils";
-import AlertDismissible from "../CustomAlert/customAlert";
 import GlobalComponents from "../_Global";
 import CartItemsUtil from "../../utils/cartUtils";
 
@@ -16,7 +15,6 @@ const states = GlobalComponents.states;
 const Products = () => {
   const [state, setState] = useState(states.loading);
   const [products, setProducts] = useState([]);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetch_products = () => {
@@ -39,7 +37,6 @@ const Products = () => {
           }
         })
         .then((data) => {
-          setMessage(data.message);
           setProducts(data.data);
           setState(states.products);
         })
@@ -55,9 +52,20 @@ const Products = () => {
       }
       return product;
     });
-    const modCartItems = mod_products.filter((product) => product.quantity !== undefined)
-    CartItemsUtil.addCartItems(modCartItems);
+    const modCartItems = mod_products.filter(
+      (product) => product.quantity !== undefined
+    );
     setProducts(mod_products);
+
+    const cartItems = CartItemsUtil.getCartItems();
+    const cartItem = products.filter((product) => product.id === id);
+    cartItem[0].quantity = 1;
+    if (cartItems === null) {
+      CartItemsUtil.addCartItems(cartItem);
+    } else {
+      const updatedCartItems = [...cartItems, cartItem[0]];
+      CartItemsUtil.addCartItems(updatedCartItems);
+    }
   };
 
   const incrementProduct = (product_id) => {
@@ -70,7 +78,6 @@ const Products = () => {
 
   const renderProducts = () => (
     <Container>
-      <AlertDismissible children={message} />
       <Row className="mt-2">
         {products.map((product) => {
           return (
@@ -88,7 +95,7 @@ const Products = () => {
   return (
     <>
       <CustomNavbar />
-      <Container>{GlobalComponents.renderTitleDivider("Products")}</Container>
+      {GlobalComponents.renderTitleDivider("Products")}
       {GlobalComponents.renderComponent(state, renderProducts)}
     </>
   );

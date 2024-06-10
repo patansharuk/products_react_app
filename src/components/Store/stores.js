@@ -54,13 +54,9 @@ const Stores = () => {
 
   const renderStores = () => (
     <Container>
-      <AlertDismissible children={message} />
       <Row className="mt-2">
         {stores.map((store) => (
-          <StoreItem
-            store={store}
-            key={store.id}
-          />
+          <StoreItem store={store} key={store.id} />
         ))}
       </Row>
     </Container>
@@ -69,9 +65,7 @@ const Stores = () => {
   return (
     <>
       <CustomNavbar />
-      <Container>
-        {GlobalComponents.renderTitleDivider("Stores")}
-      </Container>
+      {GlobalComponents.renderTitleDivider("Stores")}
       {GlobalComponents.renderComponent(state, renderStores)}
     </>
   );

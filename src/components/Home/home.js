@@ -11,6 +11,8 @@ import {
 import GlobalComponents from "../_Global";
 import fetchStores from "../../Fetching/Store/fetchStores";
 import StoreItem from "../Store/storeItem";
+import DealerAnalyticsSection from "./dealerAnalyticsSection";
+import AdminAnalyticsSection from "./adminAnalyticsSection";
 
 const states = GlobalComponents.states;
 
@@ -32,61 +34,7 @@ const fetchUserData = () => {
 };
 
 const Home = () => {
-  const [productsState, setProductsState] = useState(states.loading);
-  const [storeState, setStoreState] = useState(states.loading);
-  const [products, setProducts] = useState([]);
-  const [stores, setStore] = useState([]);
-  const [storeMessage, setStoreMessage] = useState("");
-  const [productsMessage, setProductsMessage] = useState("");
-  const [details, setDetails] = useState(fetchUserData());
-
-  useEffect(() => {
-    const fetchingProducts = async () => {
-      const token = fetch_token_else_redirect_login();
-      const data = await fetchProducts(token);
-      if (data.data) {
-        setProducts(data.data);
-        setProductsState(states.data);
-      }
-      if (data.message) {
-        setProductsMessage(data.message);
-      }
-    };
-    fetchingProducts();
-
-    const fetchingStores = async () => {
-      const token = fetch_token_else_redirect_login();
-      const data = await fetchStores(token);
-      if (data?.status === 404) {
-        setStoreState(states.empty_items);
-      } else {
-        if (data.data) {
-          setStore(data.data);
-          setStoreState(states.data);
-        }
-        if (data.message) {
-          setStoreMessage(data.message);
-        }
-      }
-    };
-    fetchingStores();
-  }, []);
-
-  const finalProductsResult = () => (
-    <Row className="mt-2">
-      {products.map((product) => {
-        return <ProductItem product={product} key={product.id} />;
-      })}
-    </Row>
-  );
-
-  const finalStoresResult = () => (
-    <Row className="mt-2">
-      {stores.map((store) => {
-        return <StoreItem store={store} key={store.id} />;
-      })}
-    </Row>
-  );
+  const [details] = useState(fetchUserData());
 
   const renderProfileSection = () => (
     <Container>
@@ -145,28 +93,25 @@ const Home = () => {
     </Container>
   );
 
-  const renderProductsSection = () => (
-    <>
-      {GlobalComponents.renderTitleDivider("Products")}
-      <Container>
-        {finalProductsResult()}
-      </Container>
-    </>
-  )
-  
+  const renderDealerAnalyticsSection = () => {
+    return <DealerAnalyticsSection />;
+  };
+
+  const renderAdminAnalyticsSection = () => {
+    return <AdminAnalyticsSection />;
+  };
 
   const renderAdminView = () => (
     <>
       {renderProfileSection()}
-      {/* {renderDealerAnalyticsSection()}
-      {renderAnalyticsSection()} */}
+      {renderAdminAnalyticsSection()}
     </>
   );
 
   const renderDealerView = () => (
     <>
       {renderProfileSection()}
-      {/* {renderAnalyticsSection()} */}
+      {renderDealerAnalyticsSection()}
     </>
   );
 
@@ -174,7 +119,6 @@ const Home = () => {
     <>
       {renderProfileSection()}
       {renderOffersSection()}
-      {renderProductsSection()}
     </>
   );
   const views = {
@@ -187,17 +131,6 @@ const Home = () => {
     <>
       <CustomNavbar />
       {GlobalComponents.renderBasedOnRole(views)}
-    </>
-  );
-
-  return (
-    <>
-      <CustomNavbar />
-      <Container>
-        {GlobalComponents.renderTitleDivider("Products")}
-        <AlertDismissible children={productsMessage} />
-        {GlobalComponents.renderComponent(productsState, finalProductsResult)}
-      </Container>
     </>
   );
 };

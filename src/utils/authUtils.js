@@ -81,38 +81,47 @@ export const fetch_token_else_redirect_login = () => {
   }
 };
 
+export const fetch_user_details_else_redirect_login = () => {
+  const user_details = get_user_details();
+  if (user_details === null) {
+    redirect_to_login();
+  } else {
+    return user_details;
+  }
+};
+
 export const is_admin = () => {
-  const user_details = get_user_details()
-  if(user_details !== null){
-    if(user_details.role === 'admin'){
-      return true
-    }else{
-      return false
+  const user_details = get_user_details();
+  if (user_details !== null) {
+    if (user_details.role === "admin") {
+      return true;
+    } else {
+      return false;
     }
   }
-  return false
-}
+  return false;
+};
 
 export const is_dealer = () => {
-  const user_details = get_user_details()
-  if(user_details !== null){
-    if(user_details.role === 'dealer'){
-      return true
-    }else{
-      return false
+  const user_details = get_user_details();
+  if (user_details !== null) {
+    if (user_details.role === "dealer") {
+      return true;
+    } else {
+      return false;
     }
   }
-  return false
-}
+  return false;
+};
 
 export const is_customer = () => {
-  const user_details = get_user_details()
-  if(user_details !== null){
-    if(user_details.role === 'dealer'){
-      return true
-    }else{
-      return false
+  const user_details = get_user_details();
+  if (user_details !== null) {
+    if (user_details.role === "customer") {
+      return true;
+    } else {
+      return false;
     }
   }
-  return false
-}
+  return false;
+};

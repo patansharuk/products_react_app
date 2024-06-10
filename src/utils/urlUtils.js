@@ -61,4 +61,16 @@ export class StoresApi {
   static store_products_url(store_id) {
     return this.domain + `stores/${store_id}/products`;
   }
+
+  static store_analytics() {
+    return this.domain + `stores/products-analytics`;
+  }
+}
+
+export class Miss{
+  static domain = "http://localhost:3002/";
+
+  static admin_dashboard_url() {
+    return this.domain + '/admin-dashboard'
+  }
 }

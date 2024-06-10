@@ -69,6 +69,7 @@ const CreateProduct = () => {
           setDescription(productInitialValues.description);
           setPrice(productInitialValues.price);
           setImageUrl(productInitialValues.image_url);
+          window.location.replace('/')
         }
       })
       .catch((e) => console.log(e));

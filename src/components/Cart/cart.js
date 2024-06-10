@@ -3,6 +3,7 @@ import CustomNavbar from "../Navbar/navbar";
 import GlobalComponents from "../_Global/index";
 import CartItemsUtil from "../../utils/cartUtils";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { add_user_details } from "../../utils/authUtils";
 
 const states = GlobalComponents.states;
 
@@ -27,6 +28,12 @@ const Cart = () => {
     fetchItems();
   }, []);
 
+  const onCartItemDelete = (id) => {
+    const filteredCartItems = cartItems.filter((item) => item.id !== id);
+    CartItemsUtil.addCartItems(filteredCartItems);
+    setCartItems(filteredCartItems);
+  };
+
   const renderCartItemColumnHeaders = () => {
     return (
       <Row>
@@ -46,8 +53,14 @@ const Cart = () => {
         <Col>${product.price}</Col>
         <Col>{product.quantity}</Col>
         <Col>${product.quantity * product.price}</Col>
-        <Col xs={1} className="badge bg-danger">
-          DEL
+        <Col xs={2}>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => onCartItemDelete(product.id)}
+          >
+            DEL
+          </Button>
         </Col>
       </Row>
     );
@@ -74,8 +87,8 @@ const Cart = () => {
   const renderTotalPrice = () => {
     const summaryDetails = {
       subtotal: cartItems.reduce((a, b) => {
-        return a.price * a.quantity + b.price * b.quantity;
-      }),
+        return a + b.price * b.quantity;
+      }, 0),
       deliveryCharges: 100,
       discount: 50,
     };

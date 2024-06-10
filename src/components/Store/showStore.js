@@ -3,7 +3,6 @@ import CustomNavbar from "../Navbar/navbar";
 import { useParams } from "react-router-dom";
 import { StoresApi } from "../../utils/urlUtils";
 import { Card, Container, ListGroup, Row } from "react-bootstrap";
-import AlertDismissible from "../CustomAlert/customAlert";
 import {
   clear_local_storage_replace_to,
   fetch_token_else_redirect_login,
@@ -11,6 +10,8 @@ import {
 import { faker } from "@faker-js/faker";
 import GlobalComponent from "../_Global";
 import fetchStoreProducts from "../../Fetching/Products/fetchStoreProducts";
+import StoreItem from "./storeItem";
+import ProductItem from "../ProductItem/product_item";
 
 const states = GlobalComponent.states;
 
@@ -80,64 +81,28 @@ const ShowStore = () => {
 
   const renderStore = () => (
     <Container>
-      <AlertDismissible children={message} />
-      <Row className="mt-2">
-        <Card className="col-lg-8 m-auto">
-          <Card.Img
-            variant="top"
-            src={faker.image.urlPicsumPhotos()}
-            height={200}
-          />
-          <Card.Body>
-            <Card.Title>{store.name}</Card.Title>
-          </Card.Body>
-          <ListGroup className="list-group-flush">
-            <ListGroup.Item>
-              <span className="fw-bold">Loaction: </span>
-              {store.location}
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <span className="fw-bold">Rating: </span>
-              {store.rating}
-            </ListGroup.Item>
-          </ListGroup>
-          <Card.Body>
-            <Card.Link href={`/stores/${storeId}/product/create`}>
-              Add Product
-            </Card.Link>
-            <Card.Link href={`/stores/${storeId}/edit`}>Edit Store</Card.Link>
-          </Card.Body>
-        </Card>
-      </Row>
+      <StoreItem store={store} key={store.id} hideOptions={true}/>
+      <Card>
+        <Card.Body>
+          <Card.Link
+            className="btn btn-primary"
+            href={`/stores/${storeId}/product/create`}
+          >
+            Add Product
+          </Card.Link>
+          <Card.Link className="btn btn-info disabled" href={`/stores/${storeId}/edit`}>
+            Edit Store
+          </Card.Link>
+        </Card.Body>
+      </Card>
     </Container>
   );
 
   const renderStoreProducts = () => (
     <Container>
-      <AlertDismissible children={productsMessage} />
       <Row className="mt-2">
         {storeProducts.map((product) => (
-          <Card className="col-md-6 col-lg-4 m-auto mb-2">
-            <Card.Img
-              variant="top"
-              src={faker.image.urlPicsumPhotos()}
-              height={200}
-            />
-            <Card.Body>
-              <Card.Title>{product.title}</Card.Title>
-              <Card.Text>{product.description}</Card.Text>
-            </Card.Body>
-            <ListGroup className="list-group-flush">
-              <ListGroup.Item>
-                <span className="fw-bold">Price: </span>
-                {product.price}
-              </ListGroup.Item>
-            </ListGroup>
-            <Card.Body>
-              <Card.Link href="#">Edit</Card.Link>
-              <Card.Link href="#">Delete</Card.Link>
-            </Card.Body>
-          </Card>
+          <ProductItem product={product} />
         ))}
       </Row>
     </Container>
@@ -146,7 +111,7 @@ const ShowStore = () => {
   return (
     <>
       <CustomNavbar />
-      <Container>{GlobalComponent.renderTitleDivider("Store")}</Container>
+      {GlobalComponent.renderTitleDivider("Store")}
       {GlobalComponent.renderComponent(state, renderStore)}
 
       <hr className="container" />
