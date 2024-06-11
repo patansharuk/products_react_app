@@ -45,33 +45,85 @@ const Products = () => {
     fetch_products();
   }, []);
 
-  const onAddProduct = (id) => {
-    const mod_products = products.map((product) => {
-      if (product.id === id) {
-        return { ...product, quantity: 1 };
-      }
-      return product;
-    });
-    const modCartItems = mod_products.filter(
-      (product) => product.quantity !== undefined
-    );
-    setProducts(mod_products);
+  const onAddProduct = (productId) => {
+    const modifyState = () => {
+      const modifiedProducts = products.map((product) => {
+        if (product.id === productId) {
+          return { ...product, quantity: 1 };
+        } else {
+          return product;
+        }
+      });
+      setProducts(modifiedProducts);
+    };
 
-    const cartItems = CartItemsUtil.getCartItems();
-    const cartItem = products.filter((product) => product.id === id);
-    cartItem[0].quantity = 1;
-    if (cartItems === null) {
-      CartItemsUtil.addCartItems(cartItem);
-    } else {
-      const updatedCartItems = [...cartItems, cartItem[0]];
-      CartItemsUtil.addCartItems(updatedCartItems);
-    }
+    const modifyLocalStorage = () => {
+      const fetchProductAppendToCart = (cartItems = "") => {
+        const product = products.filter((item) => item.id === productId);
+        if (product[0]) {
+          product[0].quantity = 1;
+          if (cartItems) {
+            CartItemsUtil.addCartItems([...cartItems, ...product]);
+          } else {
+            CartItemsUtil.addCartItems(product);
+          }
+        } else {
+          alert("something went wrong.");
+        }
+      };
+
+      const cartItems = CartItemsUtil.getCartItems();
+      if (cartItems) {
+        // check for product existence
+        const cartItem = cartItems.filter((item) => item.id === productId);
+        if (cartItem[0]) {
+          // if product exist in cartItems then increment it's quantity
+          const modifiedCartItems = cartItems.map((item) => {
+            return item.id === productId
+              ? { ...item, quantity: item.quantity + 1 }
+              : item;
+          });
+          CartItemsUtil.addCartItems(modifiedCartItems);
+          modifyState();
+        } else {
+          fetchProductAppendToCart(cartItems);
+          modifyState();
+        }
+      } else {
+        fetchProductAppendToCart();
+        modifyState();
+      }
+    };
+
+    modifyLocalStorage();
   };
 
-  const incrementProduct = (product_id) => {
-    const filtered_product = products.filter(
-      (product) => product.id === product_id
-    );
+  const onIncrementProduct = (productId) => {
+    const modifyState = () => {
+      const modifiedProducts = products.map((product) => {
+        return product.id === productId
+          ? { ...product, quantity: product.quantity + 1 }
+          : product;
+      });
+      setProducts(modifiedProducts);
+    };
+
+    const modifyLocalStorage = () => {
+      const cartItems = CartItemsUtil.getCartItems();
+      if (cartItems !== null) {
+        const modifiedCartItems = cartItems.map((cartItem) => {
+          return cartItem.id === productId
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem;
+        });
+        CartItemsUtil.addCartItems(modifiedCartItems);
+        modifyState();
+      } else {
+        alert("Something went wrong.");
+      }
+    };
+
+    modifyLocalStorage();
   };
 
   const decrementProduct = () => {};
@@ -85,6 +137,7 @@ const Products = () => {
               product={product}
               key={product.id}
               onAddProduct={onAddProduct}
+              onIncrementProduct={onIncrementProduct}
             />
           );
         })}

@@ -4,7 +4,11 @@ import { faker } from "@faker-js/faker";
 import AddToCartButton from "../AddToCartButton/addToCartButton";
 import { is_customer } from "../../utils/authUtils";
 
-const ProductItem = ({ product, onAddProduct = "" }) => {
+const ProductItem = ({
+  product,
+  onAddProduct = "",
+  onIncrementProduct = "",
+}) => {
   return (
     <Col sm="6" md="4" lg="3" className="mb-3">
       <Card style={{ width: "18rem" }} className="w-100">
@@ -16,14 +20,24 @@ const ProductItem = ({ product, onAddProduct = "" }) => {
           {is_customer() ? (
             <>
               <hr />
-              <AddToCartButton product={product} onAddProduct={onAddProduct} />
+              <AddToCartButton
+                product={product}
+                onAddProduct={onAddProduct}
+                onIncrementProduct={onIncrementProduct}
+              />
             </>
           ) : (
             <>
               <hr />
-              <Button variant="info" className="me-1" size="sm" disabled>View</Button>
-              <Button variant="warning" className="me-1" size="sm" disabled>Edit</Button>
-              <Button variant="danger" size="sm" disabled>Delete</Button>
+              <Button variant="info" className="me-1" size="sm" disabled>
+                View
+              </Button>
+              <Button variant="warning" className="me-1" size="sm" disabled>
+                Edit
+              </Button>
+              <Button variant="danger" size="sm" disabled>
+                Delete
+              </Button>
             </>
           )}
         </Card.Body>
