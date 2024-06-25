@@ -74,3 +74,9 @@ used foreman and rake for development
 created Procfile
 foreman start -p 3003
 rake start
+
+
+cypress docs
+- npx cypress open
+or (if added scripts in the .json file)
+- npm run cy:open
