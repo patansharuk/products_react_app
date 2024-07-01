@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import CustomNavbar from "../Navbar/navbar";
 import { Carousel, Col, Container, Row } from "react-bootstrap";
-import {
-  get_user_details,
-} from "../../utils/authUtils";
+import { get_user_details } from "../../utils/authUtils";
 import GlobalComponents from "../_Global";
 import DealerAnalyticsSection from "./dealerAnalyticsSection";
 import AdminAnalyticsSection from "./adminAnalyticsSection";
+import ExploreButtonSection from "../ExploreButtonSection/exploreSection";
 
 const states = GlobalComponents.states;
 
@@ -60,6 +59,10 @@ const Home = () => {
     </Container>
   );
 
+  const renderExploreSection = () => {
+    return <ExploreButtonSection />;
+  };
+
   const renderOffersSection = () => (
     <Container className="mt-3">
       <Row>
@@ -112,6 +115,7 @@ const Home = () => {
   const renderCustomerView = () => (
     <>
       {renderProfileSection()}
+      {renderExploreSection()}
       {renderOffersSection()}
     </>
   );
