@@ -1,7 +1,12 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-const AddToCartButton = ({ product, onAddProduct, onIncrementProduct }) => {
+const AddToCartButton = ({
+  product,
+  onAddProduct,
+  onIncrementProduct,
+  onDecrementProduct,
+}) => {
   const renderIncrementButton = () => {
     return (
       <Button variant="primary" onClick={() => onIncrementProduct(product.id)}>
@@ -11,7 +16,11 @@ const AddToCartButton = ({ product, onAddProduct, onIncrementProduct }) => {
   };
 
   const renderDecrementButton = () => {
-    return <Button variant="primary">-</Button>;
+    return (
+      <Button variant="primary" onClick={() => onDecrementProduct(product.id)}>
+        -
+      </Button>
+    );
   };
 
   const renderAddButton = () => {
@@ -23,6 +32,7 @@ const AddToCartButton = ({ product, onAddProduct, onIncrementProduct }) => {
   };
 
   const renderComponent = () => {
+    console.log(product);
     if (product.quantity === undefined || product.quantity === 0) {
       return renderAddButton();
     } else {

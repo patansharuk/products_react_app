@@ -1,6 +1,7 @@
 import React from "react";
 import { Badge, Nav } from "react-bootstrap";
 import { is_customer } from "../../utils/authUtils";
+import CartItemsUtil from "../../utils/cartUtils";
 
 const NavLinks = () => (
   <Nav>
@@ -19,7 +20,7 @@ const NavLinks = () => (
     </Nav.Item>
     {is_customer() ? (
       <Nav.Item>
-        <Nav.Link href="/cart">Cart - <span className="badge bg-success">{0}</span></Nav.Link>
+        <Nav.Link href="/cart">Cart - <span className="badge bg-success">{CartItemsUtil.cartItemsCount()}</span></Nav.Link>
       </Nav.Item>
     ) : (
       <span></span>

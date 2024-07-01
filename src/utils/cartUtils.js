@@ -33,6 +33,21 @@ class CartItemsUtil {
   static clearCartItems = () => {
     localStorage.removeItem(this.CART_ITEMS_KEY);
   };
+
+  static subTotal = (cartItems) => {
+    return cartItems.reduce((a, b) => {
+      return a + b.price * b.quantity;
+    }, 0);
+  };
+
+  static totalPrice = (chargeSheet = {}) => {
+    return Object.values(chargeSheet).reduce((a, b) => a + b, 0);
+  };
+
+  static cartItemsCount = () => {
+    const items = JSON.parse(localStorage.getItem(this.CART_ITEMS_KEY)) || [];
+    return items.length;
+  };
 }
 
 export default CartItemsUtil;

@@ -3,6 +3,7 @@ import CustomNavbar from "../Navbar/navbar";
 import GlobalComponents from "../_Global/index";
 import CartItemsUtil from "../../utils/cartUtils";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import AddToCartButton from "../AddToCartButton/addToCartButton";
 
 const states = GlobalComponents.states;
 
@@ -33,6 +34,36 @@ const Cart = () => {
     setCartItems(filteredCartItems);
   };
 
+  const onQuantityIncrement = (itemId) => {
+    const modifiedCartItems = cartItems.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, quantity: item.quantity + 1 };
+      }
+      return item;
+    });
+    CartItemsUtil.addCartItems(modifiedCartItems);
+    setCartItems(modifiedCartItems);
+  };
+
+  const onQuantityDecrement = (itemId) => {
+    let modStatus = true;
+    const modifiedCartItems = cartItems.map((item) => {
+      if (item.id === itemId) {
+        if (item.quantity === 1) {
+          onCartItemDelete(itemId);
+          modStatus = false;
+          return item;
+        }
+        return { ...item, quantity: item.quantity - 1 };
+      }
+      return item;
+    });
+    if (modStatus) {
+      CartItemsUtil.addCartItems(modifiedCartItems);
+      setCartItems(modifiedCartItems);
+    }
+  };
+
   const renderCartItemColumnHeaders = () => {
     return (
       <Row>
@@ -40,7 +71,7 @@ const Cart = () => {
         <Col>Price</Col>
         <Col>Quantity</Col>
         <Col>Sub Total</Col>
-        <Col xs={1}></Col>
+        <Col xs={2}>Actions</Col>
       </Row>
     );
   };
@@ -50,7 +81,15 @@ const Cart = () => {
       <Row>
         <Col>{product.title}</Col>
         <Col>${product.price}</Col>
-        <Col>{product.quantity}</Col>
+        <Col>
+          {
+            <AddToCartButton
+              product={product}
+              onIncrementProduct={onQuantityIncrement}
+              onDecrementProduct={onQuantityDecrement}
+            />
+          }
+        </Col>
         <Col>${product.quantity * product.price}</Col>
         <Col xs={2}>
           <Button
@@ -66,6 +105,9 @@ const Cart = () => {
   };
 
   const renderCartItems = () => {
+    if (cartItems.length === 0) {
+      setCartsState(states.empty_items);
+    }
     return (
       <Col md={8} className="mb-3 p-3">
         <h4>Cart Items</h4>
@@ -85,16 +127,11 @@ const Cart = () => {
 
   const renderTotalPrice = () => {
     const summaryDetails = {
-      subtotal: cartItems.reduce((a, b) => {
-        return a + b.price * b.quantity;
-      }, 0),
+      subtotal: CartItemsUtil.subTotal(cartItems),
       deliveryCharges: 100,
-      discount: 50,
+      discount: -50,
     };
-    const orderTotal =
-      summaryDetails.subtotal +
-      summaryDetails.deliveryCharges -
-      summaryDetails.discount;
+    const orderTotal = CartItemsUtil.totalPrice(summaryDetails);
     return (
       <Col md={4} className="border p-3">
         <h3 className="border-bottom border-danger border-3">Summary</h3>
@@ -108,7 +145,7 @@ const Cart = () => {
         </Row>
         <Row>
           <Col>Discount</Col>
-          <Col className="text-end">-${summaryDetails.discount}</Col>
+          <Col className="text-end">${-summaryDetails.discount}</Col>
         </Row>
         <hr />
         <Row>
