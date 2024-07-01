@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav } from "react-bootstrap";
+import { Badge, Nav } from "react-bootstrap";
 import { is_customer } from "../../utils/authUtils";
 
 const NavLinks = () => (
@@ -19,7 +19,7 @@ const NavLinks = () => (
     </Nav.Item>
     {is_customer() ? (
       <Nav.Item>
-        <Nav.Link href="/cart">Cart</Nav.Link>
+        <Nav.Link href="/cart">Cart - <span className="badge bg-success">{0}</span></Nav.Link>
       </Nav.Item>
     ) : (
       <span></span>
