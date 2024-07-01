@@ -126,7 +126,44 @@ const Products = () => {
     modifyLocalStorage();
   };
 
-  const decrementProduct = () => {};
+  const onDecrementProduct = (productId) => {
+    const modifyState = () => {
+      const modifiedProducts = products.map((product) => {
+        return product.id === productId
+          ? { ...product, quantity: product.quantity - 1 }
+          : product;
+      });
+      setProducts(modifiedProducts);
+    };
+
+    const modifyLocalStorage = () => {
+      const cartItems = CartItemsUtil.getCartItems();
+      let modStatus = false
+      if (cartItems !== null) {
+        const modifiedCartItems = cartItems.map((cartItem) => {
+          if (cartItem.id === productId) {
+            if (cartItem.quantity === 1) {
+              modStatus = true
+              return cartItem;
+            }
+            return { ...cartItem, quantity: cartItem.quantity - 1 };
+          }
+          return cartItem;
+        });
+        if(modStatus){
+          const filteredCartItems = cartItems.filter((item)=> item.id !== productId)
+          CartItemsUtil.addCartItems(filteredCartItems);
+        }else{
+          CartItemsUtil.addCartItems(modifiedCartItems);
+        }
+        modifyState();
+      } else {
+        alert("Something went wrong.");
+      }
+    };
+
+    modifyLocalStorage();
+  };
 
   const renderProducts = () => (
     <Container>
@@ -138,6 +175,7 @@ const Products = () => {
               key={product.id}
               onAddProduct={onAddProduct}
               onIncrementProduct={onIncrementProduct}
+              onDecrementProduct={onDecrementProduct}
             />
           );
         })}

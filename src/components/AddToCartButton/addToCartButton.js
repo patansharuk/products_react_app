@@ -32,12 +32,11 @@ const AddToCartButton = ({
   };
 
   const renderComponent = () => {
-    console.log(product);
     if (product.quantity === undefined || product.quantity === 0) {
       return renderAddButton();
     } else {
       return (
-        <div class="btn-group" role="group" aria-label="Basic example">
+        <div className="btn-group" role="group" aria-label="Basic example">
           {renderDecrementButton()}
           <Button variant="primary" disabled>
             {product.quantity || 0}
