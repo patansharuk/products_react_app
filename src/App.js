@@ -6,6 +6,9 @@ import Products from "./components/Products/products";
 import Signup from "./components/Auth/signup";
 import Swagger from "./components/Swagger/swagger";
 import Cart from "./components/Cart/cart";
+import Checkout from "./components/Cart/checkout"
+import SuccessCheckout from "./components/Cart/success";
+import CancelCheckout from "./components/Cart/cancel";
 import { get_auth_token } from "./utils/authUtils";
 import CreateProduct from "./components/Products/createProduct";
 import Stores from "./components/Store/stores";
@@ -67,7 +70,12 @@ const App = () => {
   );
 
   const renderCartRoute = () => (
-    <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
+    <>
+      <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
+      <Route path="/checkout" element={<PrivateRoute element={<Checkout />} />} />
+      <Route path="/success-page" element={<PrivateRoute element={<SuccessCheckout />} />} />
+      <Route path="/cancel-page" element={<PrivateRoute element={<CancelCheckout />} />} />
+    </>
   );
   return (
     <BrowserRouter>

@@ -155,7 +155,7 @@ const Cart = () => {
 
         <Row>
           <Col>
-            <Button className="w-100 mb-3 mt-2">Proceed to Checkout</Button>
+            <Button className="w-100 mb-3 mt-2" href="/checkout">Proceed to Checkout</Button>
           </Col>
         </Row>
       </Col>
